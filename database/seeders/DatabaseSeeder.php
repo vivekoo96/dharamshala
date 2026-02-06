@@ -17,9 +17,30 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::updateOrCreate(
+            ['email' => 'admin@dharamshala.com'],
+            [
+                'name' => 'Super Admin',
+                'mobile_number' => '9999999999',
+                'password' => bcrypt('password123'),
+                'role' => 'admin',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'staff@dharamshala.com'],
+            [
+                'name' => 'Reception Staff',
+                'mobile_number' => '8888888888',
+                'password' => bcrypt('password123'),
+                'role' => 'staff',
+            ]
+        );
+
+        $this->call([
+            StaffSeeder::class,
+            PropertySeeder::class,
+            RoomSeeder::class,
         ]);
     }
 }

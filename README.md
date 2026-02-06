@@ -1,59 +1,331 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Dharmashala Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<div align="center">
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Livewire](https://img.shields.io/badge/Livewire-3-4E56A6?style=for-the-badge&logo=livewire&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-3-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**A comprehensive, production-ready management system for Dharmashalas, Satrams, and religious guest houses**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+[Features](#-features) • [Installation](#-installation) • [Documentation](#-documentation) • [Screenshots](#-screenshots)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+</div>
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 📋 Overview
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+The Dharmashala Management System is a modern, full-featured web application designed specifically for managing religious guest houses, dharmashalas, and satrams. Built with Laravel 12 and Livewire 3, it provides a seamless experience for both staff and guests.
 
-## Laravel Sponsors
+### Key Highlights
+- 🏨 **100+ Room Management** with real-time status tracking
+- 💳 **Multi-mode Payment Processing** (Cash, Online, UPI, Card)
+- 📱 **Automated Notifications** via WhatsApp & SMS
+- 🤖 **AI-Powered OCR** for ID verification
+- 📊 **Comprehensive Analytics** with shift-wise reports
+- 🧾 **Trust-Compliant PDF Invoicing**
+- 🎨 **Premium UI/UX** with modern design
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## ✨ Features
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### For Staff & Administrators
 
-## Contributing
+#### 1. Counter Booking Interface
+- Walk-in guest registration
+- Multi-room selection
+- ID capture with OCR auto-fill
+- Instant booking creation
+- Payment recording
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### 2. Visual Room Map
+- Interactive 100+ room grid
+- Color-coded status indicators
+- Building and floor navigation
+- Real-time availability updates
+- Quick room details on hover
 
-## Code of Conduct
+#### 3. Cash Ledger
+- Daily collection tracking
+- Payment mode breakdown
+- Transaction history with guest details
+- Date-based filtering
+- Summary statistics
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### 4. Collection Reports
+- Shift-wise analysis (Morning/Evening/Night)
+- Date range filtering
+- Bookings summary by status
+- Payment analytics
+- Export to PDF/Excel
 
-## Security Vulnerabilities
+#### 5. PDF Invoicing
+- Trust-compliant invoice templates
+- Professional formatting
+- Itemized charges
+- Payment history
+- Download & print options
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### For Guests (Public)
 
-## License
+#### 1. Online Booking
+- BookMyShow-style 4-step flow
+- Live availability checking
+- Room category browsing
+- Automatic tariff calculation
+- Instant booking confirmation
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### 2. Automated Notifications
+- Booking confirmations
+- Payment receipts
+- Check-in reminders
+- WhatsApp & SMS delivery
+
+---
+
+## 🚀 Installation
+
+### Prerequisites
+- PHP 8.2 or higher
+- MySQL 8.0 or higher
+- Composer
+- Node.js & NPM
+- Tesseract OCR (optional, for ID scanning)
+
+### Quick Start
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd dharamshala
+
+# Install PHP dependencies
+composer install
+
+# Install JavaScript dependencies
+npm install && npm run build
+
+# Setup environment
+cp .env.example .env
+php artisan key:generate
+
+# Configure database in .env
+# DB_DATABASE=dharamshala
+# DB_USERNAME=root
+# DB_PASSWORD=your_password
+
+# Run migrations and seeders
+php artisan migrate
+php artisan db:seed --class=PropertySeeder
+php artisan db:seed --class=UserSeeder
+
+# Link storage
+php artisan storage:link
+
+# Start development server
+php artisan serve
+```
+
+Visit `http://localhost:8000` and login with:
+- **Mobile**: `9999999999`
+- **Password**: `password123`
+
+---
+
+## ⚙️ Configuration
+
+### Payment Gateway (Razorpay)
+
+1. Sign up at [razorpay.com](https://razorpay.com)
+2. Get your API Key and Secret
+3. Add to `.env`:
+
+```env
+RAZORPAY_KEY=your_razorpay_key_here
+RAZORPAY_SECRET=your_razorpay_secret_here
+```
+
+### Notifications (Twilio)
+
+1. Sign up at [twilio.com](https://twilio.com)
+2. Get your Account SID and Auth Token
+3. Add to `.env`:
+
+```env
+TWILIO_SID=your_twilio_sid_here
+TWILIO_TOKEN=your_twilio_token_here
+TWILIO_PHONE_NUMBER=+1234567890
+TWILIO_WHATSAPP_FROM=+1234567890
+```
+
+### OCR (Tesseract)
+
+**Windows:**
+```bash
+choco install tesseract
+```
+
+**Linux:**
+```bash
+sudo apt install tesseract-ocr
+```
+
+Verify installation:
+```bash
+tesseract --version
+```
+
+---
+
+## 🗺️ Routes
+
+### Public Routes
+- `/` - Welcome page
+- `/book` - Online booking interface
+- `/auth/send-otp` - Request OTP
+- `/auth/verify-otp` - Verify OTP
+
+### Authenticated Routes (Staff/Admin)
+- `/rooms` - Visual room map
+- `/booking/counter` - Counter booking interface
+- `/ledger` - Cash ledger & payment tracking
+- `/reports` - Collection reports & analytics
+
+---
+
+## 🛠️ Technology Stack
+
+### Backend
+- **Framework**: Laravel 12
+- **Database**: MySQL 8.0
+- **Authentication**: Laravel Sanctum + Custom OTP
+- **Real-time**: Livewire 3
+- **PDF Generation**: DomPDF
+- **OCR**: Tesseract OCR
+- **Payments**: Razorpay SDK
+- **Notifications**: Twilio API
+
+### Frontend
+- **UI Framework**: Livewire 3
+- **Styling**: Tailwind CSS 3
+- **JavaScript**: Alpine.js
+- **Icons**: Heroicons (SVG)
+- **Fonts**: Inter (Google Fonts)
+
+---
+
+## 📊 Database Schema
+
+### Core Tables
+- `buildings` - Property buildings
+- `floors` - Building floors
+- `rooms` - Individual rooms (100+)
+- `room_categories` - Room types & pricing
+- `guests` - Guest information
+- `bookings` - Reservations
+- `booking_room` - Booking-room pivot table
+- `payments` - Transaction records
+- `users` - Staff/Admin users
+
+---
+
+## 📚 Documentation
+
+- **[Project Summary](brain/project_summary.md)** - Comprehensive system overview
+- **[Quick Start Guide](brain/quick_start.md)** - 5-minute deployment guide
+- **[Walkthrough](brain/walkthrough.md)** - Feature walkthrough
+- **[Task List](brain/task.md)** - Project checklist
+- **[Tesseract Setup](brain/tesseract_install.md)** - OCR installation guide
+
+---
+
+## 🎨 Screenshots
+
+### Counter Booking Interface
+Premium UI with ID capture and OCR auto-fill
+
+### Visual Room Map
+Interactive 100+ room grid with real-time status
+
+### Online Booking
+BookMyShow-style 4-step booking flow
+
+### Cash Ledger
+Daily collection tracking with payment mode breakdown
+
+### Collection Reports
+Shift-wise analytics with export options
+
+---
+
+## 🔒 Security Features
+
+- ✅ OTP-based authentication
+- ✅ Role-based access control (Admin/Staff)
+- ✅ Payment signature verification (Razorpay)
+- ✅ CSRF protection
+- ✅ Secure file uploads
+- ✅ Environment-based configuration
+
+---
+
+## 📈 Project Metrics
+
+- **Routes**: 15+
+- **Livewire Components**: 5
+- **Models**: 8
+- **Services**: 4
+- **Migrations**: 10+
+- **Lines of Code**: ~5,000+
+- **Room Capacity**: 100+ rooms
+- **Payment Modes**: 4 (Cash, Online, UPI, Card)
+
+---
+
+## 🤝 Contributing
+
+This is a complete, production-ready system. For customizations:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+This project is proprietary software. All rights reserved.
+
+---
+
+## 🙏 Acknowledgments
+
+- Laravel Team for the amazing framework
+- Livewire Team for reactive components
+- Tailwind CSS for utility-first styling
+- Razorpay for payment gateway
+- Twilio for messaging services
+- Tesseract OCR for text extraction
+
+---
+
+## 📞 Support
+
+For issues, questions, or customization requests:
+- 📧 Email: support@dharamshalaconnect.com
+- 📱 Phone: +91 XXXXX XXXXX
+
+---
+
+<div align="center">
+
+**Built with ❤️ for Dharmashalas and Satrams**
+
+Made with Laravel • Livewire • Tailwind CSS
+
+</div>

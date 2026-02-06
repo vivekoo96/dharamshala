@@ -35,4 +35,16 @@ return [
         ],
     ],
 
+    'razorpay' => [
+        'key' => env('RAZORPAY_KEY'),
+        'secret' => env('RAZORPAY_SECRET'),
+    ],
+
+    'twilio' => [
+        'sid' => env('TWILIO_SID'),
+        'token' => env('TWILIO_TOKEN'),
+        'phone_number' => env('TWILIO_PHONE_NUMBER'),
+        'whatsapp_from' => env('TWILIO_WHATSAPP_FROM'),
+    ],
+
 ];

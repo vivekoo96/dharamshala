@@ -10,8 +10,13 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "*",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "livewire/livewire": "*",
+        "razorpay/razorpay": "*",
+        "spatie/laravel-backup": "*",
+        "thiagoalessio/tesseract_ocr": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -19,6 +24,7 @@
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "laravel/sail": "^1.41",
+        "laravel/telescope": "*",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "pestphp/pest": "^4.3",
@@ -29,7 +35,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -85,6 +94,9 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "platform": {
+            "php": "8.3.0"
         }
     },
     "minimum-stability": "stable",
