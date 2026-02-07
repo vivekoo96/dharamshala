@@ -60,6 +60,33 @@ class CollectionReports extends Component
 
         $payments = $query->get();
 
+        // Bookings summary
+        $bookingsQuery = Booking::whereBetween('created_at', [
+            Carbon::parse($this->date_from)->startOfDay(),
+            Carbon::parse($this->date_to)->endOfDay()
+        ]);
+
+        // Shift filtering for bookings as well
+        if ($this->shift !== 'all') {
+            $bookingsQuery->where(function ($q) {
+                $hours = match ($this->shift) {
+                    'morning' => ['06:00:00', '14:00:00'],
+                    'evening' => ['14:00:00', '22:00:00'],
+                    'night' => ['22:00:00', '06:00:00'],
+                };
+
+                if ($this->shift === 'night') {
+                    $q->whereTime('created_at', '>=', '22:00:00')
+                        ->orWhereTime('created_at', '<', '06:00:00');
+                } else {
+                    $q->whereTime('created_at', '>=', $hours[0])
+                        ->whereTime('created_at', '<', $hours[1]);
+                }
+            });
+        }
+
+        $bookings = $bookingsQuery->get();
+
         // Payment summary
         $this->summary = [
             'total_collection' => $payments->sum('amount'),
@@ -68,15 +95,9 @@ class CollectionReports extends Component
             'online' => $payments->where('payment_mode', 'online')->sum('amount'),
             'upi' => $payments->where('payment_mode', 'upi')->sum('amount'),
             'card' => $payments->where('payment_mode', 'card')->sum('amount'),
+            'total_gross' => $bookings->sum('total_amount'),
+            'total_discount' => $bookings->sum('discount_amount'),
         ];
-
-        // Bookings summary
-        $bookingsQuery = Booking::whereBetween('created_at', [
-            Carbon::parse($this->date_from)->startOfDay(),
-            Carbon::parse($this->date_to)->endOfDay()
-        ]);
-
-        $bookings = $bookingsQuery->get();
 
         $this->bookings_summary = [
             'total_bookings' => $bookings->count(),

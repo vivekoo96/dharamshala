@@ -54,11 +54,18 @@
     <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ trans_db('payment_collection_summary') }}</h2>
         <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
-            <div class="bg-green-600 rounded-lg p-4 text-white">
-                <p class="text-sm opacity-90">{{ trans_db('total_collection') }}</p>
+            <div class="bg-indigo-600 rounded-lg p-4 text-white">
+                <p class="text-sm opacity-90">Gross Revenue</p>
+                <p class="text-2xl font-bold mt-1">₹{{ number_format($summary['total_gross'] ?? 0, 0) }}</p>
+            </div>
+            <div class="bg-orange-500 rounded-lg p-4 text-white">
+                <p class="text-sm opacity-90">Total Discounts</p>
+                <p class="text-2xl font-bold mt-1">₹{{ number_format($summary['total_discount'] ?? 0, 0) }}</p>
+            </div>
+            <div class="bg-emerald-600 rounded-lg p-4 text-white">
+                <p class="text-sm opacity-90">Net Collection</p>
                 <p class="text-2xl font-bold mt-1">₹{{ number_format($summary['total_collection'] ?? 0, 0) }}</p>
-                <p class="text-xs opacity-75 mt-1">{{ $summary['total_transactions'] ?? 0 }}
-                    {{ trans_db('transactions') }}</p>
+                <p class="text-xs opacity-75 mt-1">{{ $summary['total_transactions'] ?? 0 }} Transactions</p>
             </div>
             <div class="bg-white border border-gray-200 rounded-lg p-4">
                 <p class="text-sm text-gray-600">{{ trans_db('cash') }}</p>

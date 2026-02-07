@@ -146,6 +146,14 @@ class TranslationSeeder extends Seeder
                 'te' => 'అతిథి వివరాలు',
                 'ta' => 'விருந்தினர் விவரங்கள்',
             ],
+            'guest_name' => [
+                'en' => 'Guest Name',
+                'hi' => 'अतिथि का नाम',
+                'gu' => 'મહેમાનનું નામ',
+                'mr' => 'अतिथीचे नाव',
+                'te' => 'అతిథి పేరు',
+                'ta' => 'விருந்தினர் பெயர்',
+            ],
 
             // Step 1: Date Selection
             'when_stay' => [
@@ -179,6 +187,14 @@ class TranslationSeeder extends Seeder
                 'mr' => 'अतिथींची संख्या',
                 'te' => 'అతిథుల సంఖ్య',
                 'ta' => 'விருந்தினர்களின் எண்ணிக்கை',
+            ],
+            'total_members' => [
+                'en' => 'Total Members',
+                'hi' => 'कुल सदस्य',
+                'gu' => 'કુલ સભ્યો',
+                'mr' => 'एकूण सदस्य',
+                'te' => 'మొత్తం సభ్యులు',
+                'ta' => 'மொத்த உறுப்பினர்கள்',
             ],
             'guests' => [
                 'en' => 'Guests',
@@ -454,6 +470,22 @@ class TranslationSeeder extends Seeder
                 'te' => 'బుకింగ్ ధృవీకరించండి →',
                 'ta' => 'முன்பதிவை உறுதிப்படுத்தவும் →',
             ],
+            'confirm' => [
+                'en' => 'Confirm',
+                'hi' => 'पुष्टि करें',
+                'gu' => 'પુષ્ટિ કરો',
+                'mr' => 'पुष्टी करा',
+                'te' => 'ధృవీకరించండి',
+                'ta' => 'உறுதிப்படுத்தவும்',
+            ],
+            'reset' => [
+                'en' => 'Reset',
+                'hi' => 'रीसेट',
+                'gu' => 'રીસેટ',
+                'mr' => 'रीसेट',
+                'te' => 'రీసెట్',
+                'ta' => 'மீட்டமை',
+            ],
 
             // Step 4: Confirmation
             'booking_confirmed' => [
@@ -703,6 +735,14 @@ class TranslationSeeder extends Seeder
                 'hi' => 'कुल देय',
                 'gu' => 'કુલ ચૂકવવાપાત્ર',
                 'mr' => 'एकूण देय',
+            ],
+            'total_payable_amount' => [
+                'en' => 'Total Payable Amount',
+                'hi' => 'कुल देय राशि',
+                'gu' => 'કુલ ચૂકવવાપાત્ર રકમ',
+                'mr' => 'एकूण देय रक्कम',
+                'te' => 'మొత్తం చెల్లించవలసిన సొమ్ము',
+                'ta' => 'மொத்த செலுத்த வேண்டிய தொகை',
             ],
             'reset_form' => [
                 'en' => 'Reset Form',

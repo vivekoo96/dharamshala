@@ -4,8 +4,10 @@ namespace App\Livewire;
 
 use App\Models\Guest;
 use App\Models\Booking;
+use App\Models\Payment;
 use App\Models\Room;
 use App\Models\RoomCategory;
+use App\Models\Building;
 use App\Services\OcrService;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
@@ -30,13 +32,17 @@ class CounterBooking extends Component
 
     public $check_in;
     public $check_out;
-    public $number_of_guests = 1;
+    public $adults_male = 1;
+    public $adults_female = 0;
+    public $children = 0;
     public $selected_rooms = [];
     public $payment_mode = 'cash';
     public $filter_category_id = null;
+    public $discount = 0;
+    public $discount_reason = '';
 
-    // Data for View
-    public $available_rooms = [];
+    // For View
+    public $buildings = [];
     public $room_categories = [];
 
     public function mount()
@@ -44,25 +50,28 @@ class CounterBooking extends Component
         $this->check_in = now()->format('Y-m-d\TH:i');
         $this->check_out = now()->addDay()->format('Y-m-d\TH:i');
         $this->room_categories = RoomCategory::all();
-        $this->loadAvailableRooms();
+        $this->loadRooms();
     }
 
-    public function loadAvailableRooms()
+    public function loadRooms()
     {
-        $query = Room::with('roomCategory')
-            ->where('status', 'available');
-
-        if ($this->filter_category_id) {
-            $query->where('room_category_id', $this->filter_category_id);
-        }
-
-        $this->available_rooms = $query->get();
+        $this->buildings = Building::with([
+            'floors' => function ($query) {
+                $query->orderBy('floor_number', 'desc');
+            },
+            'floors.rooms' => function ($query) {
+                $query->with('roomCategory');
+                if ($this->filter_category_id) {
+                    $query->where('room_category_id', $this->filter_category_id);
+                }
+            }
+        ])->get();
     }
 
     public function setFilter($categoryId = null)
     {
         $this->filter_category_id = $categoryId;
-        $this->loadAvailableRooms();
+        $this->loadRooms();
     }
 
     public function toggleRoom($roomId)
@@ -141,7 +150,15 @@ class CounterBooking extends Component
     #[Computed]
     public function totalPayable()
     {
-        return $this->totalTariff() + $this->totalDeposit();
+        return max(0, $this->totalTariff() + $this->totalDeposit() - (float) $this->discount);
+    }
+
+    #[Computed]
+    public function selectedCapacity()
+    {
+        if (empty($this->selected_rooms))
+            return 0;
+        return Room::whereIn('id', $this->selected_rooms)->get()->sum('remaining_beds');
     }
 
     public function createBooking()
@@ -154,9 +171,26 @@ class CounterBooking extends Component
             'check_in' => 'required|date',
             'check_out' => 'required|date|after:check_in',
             'selected_rooms' => 'required|array|min:1',
+            'adults_male' => 'required|integer|min:0',
+            'adults_female' => 'required|integer|min:0',
+            'children' => 'nullable|integer|min:0',
             'id_image' => 'nullable|image|max:2048',
-            'payment_mode' => 'required|string'
+            'payment_mode' => 'required|string',
+            'discount' => 'nullable|numeric|min:0',
+            'discount_reason' => 'nullable|string|max:255',
         ]);
+
+        // Verify total capacity
+        $totalAdults = $this->adults_male + $this->adults_female;
+        if ($totalAdults < 1) {
+            $this->addError('adults_male', "At least one adult is required.");
+            return;
+        }
+
+        if ($this->selectedCapacity < $totalAdults) {
+            $this->addError('selected_rooms', "Total capacity ({$this->selectedCapacity}) is less than adults ({$totalAdults}).");
+            return;
+        }
 
         $idImagePath = null;
         if ($this->id_image) {
@@ -179,33 +213,76 @@ class CounterBooking extends Component
             'guest_id' => $guest->id,
             'check_in' => $this->check_in,
             'check_out' => $this->check_out,
-            'total_amount' => $this->totalPayable(),
+            'total_amount' => $this->totalTariff() + $this->totalDeposit(),
+            'discount_amount' => $this->discount,
+            'discount_reason' => $this->discount_reason,
             'paid_amount' => $this->totalPayable(), // At counter, usually paid immediately
             'payment_mode' => $this->payment_mode,
             'status' => 'confirmed'
         ]);
 
-        foreach ($this->selectedRoomsData as $room) {
+        // Create initial payment recorded in reports
+        if ($this->totalPayable() > 0) {
+            Payment::create([
+                'booking_id' => $booking->id,
+                'amount' => $this->totalPayable(),
+                'payment_mode' => $this->payment_mode,
+                'status' => 'completed'
+            ]);
+        }
+
+        $remainingMale = $this->adults_male;
+        $remainingFemale = $this->adults_female;
+        $remainingChildren = $this->children;
+        $rooms = $this->selectedRoomsData;
+
+        foreach ($rooms as $room) {
+            $capacity = $room->remaining_beds;
+
+            // Distribute male adults first
+            $maleInThisRoom = min($remainingMale, $capacity);
+            $remainingMale -= $maleInThisRoom;
+            $currentRoomBedsTaken = $maleInThisRoom;
+
+            // Then female adults
+            $femaleInThisRoom = min($remainingFemale, $capacity - $currentRoomBedsTaken);
+            $remainingFemale -= $femaleInThisRoom;
+
+            // Distribute children
+            $childrenInThisRoom = 0;
+            if ($remainingChildren > 0) {
+                $childrenInThisRoom = count($rooms) > 1 ? ceil($this->children / count($rooms)) : $this->children;
+                if ($childrenInThisRoom > $remainingChildren)
+                    $childrenInThisRoom = $remainingChildren;
+                $remainingChildren -= $childrenInThisRoom;
+            }
+
             $booking->rooms()->attach($room->id, [
                 'tariff' => $room->roomCategory->base_tariff,
-                'deposit' => $room->roomCategory->deposit
+                'deposit' => $room->roomCategory->deposit,
+                'adults' => $maleInThisRoom + $femaleInThisRoom,
+                'adults_male' => $maleInThisRoom,
+                'adults_female' => $femaleInThisRoom,
+                'children' => $childrenInThisRoom
             ]);
-
-            // Re-fetch to ensure it's a model instance and avoid lint warning
-            Room::where('id', $room->id)->update(['status' => 'occupied']);
         }
 
         session()->flash('success', 'Booking created successfully! Booking ID: ' . $booking->id);
 
-        $this->reset(['first_name', 'last_name', 'mobile_number', 'id_number', 'address', 'selected_rooms', 'id_image', 'payment_mode']);
-        $this->loadAvailableRooms();
+        $this->reset(['first_name', 'last_name', 'mobile_number', 'id_number', 'address', 'selected_rooms', 'id_image', 'payment_mode', 'adults_male', 'adults_female', 'children', 'discount', 'discount_reason']);
+        $this->adults_male = 1;
+        $this->adults_female = 0;
+        $this->children = 0;
+        $this->loadRooms();
     }
 
     public function resetForm()
     {
-        $this->reset(['first_name', 'last_name', 'mobile_number', 'id_number', 'address', 'selected_rooms', 'id_image', 'number_of_guests', 'payment_mode', 'filter_category_id']);
-        $this->number_of_guests = 1;
-        $this->loadAvailableRooms();
+        $this->reset(['first_name', 'last_name', 'mobile_number', 'id_number', 'address', 'selected_rooms', 'id_image', 'adults_male', 'adults_female', 'children', 'payment_mode', 'filter_category_id', 'discount', 'discount_reason']);
+        $this->adults_male = 1;
+        $this->adults_female = 0;
+        $this->children = 0;
+        $this->loadRooms();
         session()->flash('success', 'Form reset successfully!');
     }
 

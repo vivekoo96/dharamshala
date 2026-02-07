@@ -49,7 +49,7 @@
 <body class="bg-gray-50">
 
     <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-4">
+        <div class="max-w-[96%] mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 {{-- Left: Logo + Branding --}}
                 <div class="flex items-center space-x-3">
@@ -129,7 +129,7 @@
     </main>
 
     <footer class="bg-gray-900 text-white py-12 mt-16 relative z-10">
-        <div class="container mx-auto px-6">
+        <div class="max-w-[96%] mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 {{-- About Section --}}
                 <div class="md:col-span-2">

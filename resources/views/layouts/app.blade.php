@@ -41,13 +41,12 @@
     <div class="flex h-screen overflow-hidden">
         {{-- Sidebar --}}
         <aside
-            class="fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-300 lg:static lg:inset-0 flex flex-col"
+            class="fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-300 lg:static lg:inset-0 lg:translate-x-0 flex flex-col"
             :class="{
                 'w-64': desktopSidebarOpen,
                 'w-20': !desktopSidebarOpen,
                 'translate-x-0': sidebarOpen,
-                '-translate-x-full': !sidebarOpen && !window.innerWidth >= 1024,
-                'lg:translate-x-0': true
+                '-translate-x-full': !sidebarOpen
             }" x-cloak>
 
             {{-- Logo --}}
@@ -313,7 +312,8 @@
             {{-- Top Header --}}
             <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 lg:px-8">
                 <div class="flex items-center">
-                    <button @click="sidebarOpen = true" class="lg:hidden text-gray-500 hover:text-gray-700 mr-4">
+                    <button @click="sidebarOpen = true"
+                        class="lg:hidden text-gray-500 hover:text-gray-700 mr-3 md:mr-4">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 6h16M4 12h16M4 18h16"></path>
@@ -372,8 +372,10 @@
             </header>
 
             {{-- Page Content --}}
-            <main class="flex-1 overflow-y-auto p-4 lg:p-8">
-                {{ $slot }}
+            <main class="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+                <div class="max-w-[98%] mx-auto">
+                    {{ $slot }}
+                </div>
             </main>
         </div>
     </div>

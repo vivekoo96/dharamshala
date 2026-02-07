@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    protected $fillable = ['guest_id', 'check_in', 'check_out', 'total_amount', 'paid_amount', 'status', 'payment_mode'];
+    protected $fillable = ['guest_id', 'check_in', 'check_out', 'total_amount', 'paid_amount', 'status', 'payment_mode', 'discount_amount', 'discount_reason'];
 
     protected $casts = [
         'check_in' => 'datetime',

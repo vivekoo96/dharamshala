@@ -113,21 +113,23 @@
     <div class="summary-box">
         <table class="grid">
             <tr>
-                <td>
-                    <div class="card">
-                        <div class="label">{{ trans_db('total_collection') }}</div>
-                        <div class="value">₹{{ number_format($summary['total_collection'], 0) }}</div>
-                        <div style="font-size: 10px; color: #666;">{{ $summary['total_transactions'] }}
-                            {{ trans_db('transactions') }}</div>
+                <td style="width: 33.33%;">
+                    <div class="card" style="background: #eef2ff;">
+                        <div class="label">Gross Revenue</div>
+                        <div class="value">₹{{ number_format($summary['total_gross'], 0) }}</div>
                     </div>
                 </td>
-                <td>
-                    <div class="card">
-                        <div class="label">{{ trans_db('total_bookings') }}</div>
-                        <div class="value">{{ $bookings_summary['total_bookings'] }}</div>
-                        <div style="font-size: 10px; color: #666;">
-                            {{ $bookings_summary['confirmed'] }} {{ trans_db('confirmed') }},
-                            {{ $bookings_summary['checked_in'] }} {{ trans_db('checked_in') }}
+                <td style="width: 33.33%;">
+                    <div class="card" style="background: #fff7ed;">
+                        <div class="label">Total Discounts</div>
+                        <div class="value">₹{{ number_format($summary['total_discount'], 0) }}</div>
+                    </div>
+                </td>
+                <td style="width: 33.33%;">
+                    <div class="card" style="background: #ecfdf5;">
+                        <div class="label">Net Collection</div>
+                        <div class="value">₹{{ number_format($summary['total_collection'], 0) }}</div>
+                        <div style="font-size: 10px; color: #666;">{{ $summary['total_transactions'] }} Transactions
                         </div>
                     </div>
                 </td>
