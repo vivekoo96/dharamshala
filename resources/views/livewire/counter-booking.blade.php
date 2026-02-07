@@ -294,8 +294,12 @@
                                                                 {{ $isAC ? 'AC' : 'NON-AC' }}
                                                             </div>
 
-                                                            <div class="text-xs font-black leading-none">
+                                                            <div class="text-[10px] font-black leading-none">
                                                                 {{ $room->room_number }}
+                                                            </div>
+
+                                                            <div class="text-[8px] font-bold opacity-70 leading-none">
+                                                                ₹{{ number_format($room->roomCategory->base_tariff, 0) }}
                                                             </div>
 
                                                             <div class="flex flex-col items-center gap-0.5">
