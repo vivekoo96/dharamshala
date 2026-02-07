@@ -34,6 +34,7 @@
         }
     </style>
     @livewireStyles
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body class="bg-gray-50" x-data="{ sidebarOpen: false, desktopSidebarOpen: true }">
@@ -378,6 +379,20 @@
     </div>
 
     @livewireScripts
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+        document.addEventListener('livewire:navigated', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+        // Handle Livewire updates
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.hook('morph.updated', (el, component) => {
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            });
+        });
+    </script>
 </body>
 
 </html>

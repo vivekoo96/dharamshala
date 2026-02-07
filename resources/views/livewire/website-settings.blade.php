@@ -24,13 +24,7 @@
             {{-- General Settings --}}
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                        </path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
+                    <i data-lucide="settings" class="w-5 h-5 mr-2 text-blue-600"></i>
                     General Settings
                 </h2>
                 <div class="space-y-4">
@@ -55,11 +49,7 @@
             {{-- Contact Information --}}
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                        </path>
-                    </svg>
+                    <i data-lucide="mail" class="w-5 h-5 mr-2 text-green-600"></i>
                     Contact Information
                 </h2>
                 <div class="space-y-4">
@@ -84,11 +74,7 @@
             {{-- Social Media Links --}}
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z">
-                        </path>
-                    </svg>
+                    <i data-lucide="link" class="w-5 h-5 mr-2 text-purple-600"></i>
                     Social Media Links
                 </h2>
                 <div class="space-y-4">
@@ -121,11 +107,7 @@
             {{-- Footer Settings --}}
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
-                        </path>
-                    </svg>
+                    <i data-lucide="layout" class="w-5 h-5 mr-2 text-orange-600"></i>
                     Footer Settings
                 </h2>
                 <div class="space-y-4">
@@ -148,7 +130,8 @@
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
                 <button wire:click="save"
-                    class="w-full px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition shadow-md hover:shadow-lg mb-3">
+                    class="w-full px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition shadow-md hover:shadow-lg mb-3 flex items-center justify-center gap-2">
+                    <i data-lucide="save" class="w-5 h-5"></i>
                     Save All Settings
                 </button>
 
@@ -158,12 +141,7 @@
                     <h4 class="text-sm font-bold text-gray-900 uppercase tracking-widest">Maintenance</h4>
                     <button wire:click="runBackup" wire:loading.attr="disabled"
                         class="w-full px-4 py-3 bg-white border border-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition shadow-sm flex items-center justify-center">
-                        <svg wire:loading.remove class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
-                            </path>
-                        </svg>
+                        <i wire:loading.remove data-lucide="database" class="w-5 h-5 mr-2 text-gray-400"></i>
                         <svg wire:loading class="animate-spin h-5 w-5 mr-3 text-blue-600" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
                             </circle>
@@ -175,8 +153,11 @@
                         <span wire:loading>Backing up...</span>
                     </button>
                 </div>
-                <div class="text-xs text-gray-600 bg-gray-50 p-3 rounded-lg">
-                    <p class="font-medium mb-1">💡 Quick Tips:</p>
+                <div class="text-xs text-gray-600 bg-gray-50 p-3 rounded-lg mt-4">
+                    <p class="font-medium mb-1 flex items-center gap-1">
+                        <i data-lucide="info" class="w-3 h-3"></i>
+                        💡 Quick Tips:
+                    </p>
                     <ul class="space-y-1 list-disc list-inside">
                         <li>Changes apply site-wide</li>
                         <li>Social links are optional</li>

@@ -1,173 +1,59 @@
 <div class="min-h-screen bg-white">
-    {{-- Single Clean Navigation Bar --}}
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                {{-- Left: Logo + Branding --}}
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
-                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                            </path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold text-gray-900">Dharamshala Connect</h1>
-                        <p class="text-xs text-gray-600">Shree Ram Trust</p>
-                    </div>
-                </div>
 
-                {{-- Right: Navigation + Language Switcher --}}
-                <div class="flex items-center space-x-6">
-                    <a href="/"
-                        class="text-sm font-semibold text-blue-600 border-b-2 border-blue-600 pb-1">{{ trans_db('home') }}</a>
-                    <a href="/book"
-                        class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">{{ trans_db('book_now') }}</a>
-                    <div class="h-6 w-px bg-gray-300"></div>
-                    <a href="/login"
-                        class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">{{ trans_db('staff_login') }}</a>
+    {{-- Dynamic Hero Slider --}}
+    <div class="relative h-[650px] flex items-center justify-center overflow-hidden bg-slate-900" x-data="{ 
+            active: 0, 
+            slides: [
+                { image: '{{ asset('images/slider-1.png') }}', title: '{{ trans_db('welcome_title') }}', subtitle: '{{ trans_db('welcome_subtitle') }}' },
+                { image: '{{ asset('images/slider-2.png') }}', title: 'Spiritual Serenity', subtitle: 'Experience the divine atmosphere in our sacred halls.' },
+                { image: '{{ asset('images/slider-3.png') }}', title: 'Modern Comfort', subtitle: 'Traditional hospitality blended with modern amenities.' }
+            ],
+            next() { this.active = (this.active + 1) % this.slides.length },
+            prev() { this.active = (this.active - 1 + this.slides.length) % this.slides.length }
+         }" x-init="setInterval(() => next(), 6000)">
 
-                    {{-- Language Switcher --}}
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open"
-                            class="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition border border-gray-300 rounded-lg hover:border-blue-600">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129">
-                                </path>
-                            </svg>
-                            <span>
-                                @if(app()->getLocale() == 'en') English
-                                @elseif(app()->getLocale() == 'hi') हिंदी
-                                @elseif(app()->getLocale() == 'gu') ગુજરાતી
-                                @elseif(app()->getLocale() == 'te') తెలుగు
-                                @elseif(app()->getLocale() == 'ta') தமிழ்
-                                @endif
-                            </span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-
-                        <div x-show="open" @click.away="open = false" x-transition
-                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                            <a href="/lang/en"
-                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
-                                <span class="flex items-center space-x-2">
-                                    <span>🇺🇸</span>
-                                    <span>English</span>
-                                </span>
-                                @if(app()->getLocale() == 'en')
-                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                @endif
-                            </a>
-                            <a href="/lang/hi"
-                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
-                                <span class="flex items-center space-x-2">
-                                    <span>🇮🇳</span>
-                                    <span>हिंदी</span>
-                                </span>
-                                @if(app()->getLocale() == 'hi')
-                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                @endif
-                            </a>
-                            <a href="/lang/gu"
-                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
-                                <span class="flex items-center space-x-2">
-                                    <span>🦁</span>
-                                    <span>ગુજરાતી</span>
-                                </span>
-                                @if(app()->getLocale() == 'gu')
-                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                @endif
-                            </a>
-                            <a href="/lang/mr"
-                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
-                                <span class="flex items-center space-x-2">
-                                    <span>🚩</span>
-                                    <span>मराठी</span>
-                                </span>
-                                @if(app()->getLocale() == 'mr')
-                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                @endif
-                            </a>
-                            <a href="/lang/te"
-                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
-                                <span class="flex items-center space-x-2">
-                                    <span>🕉️</span>
-                                    <span>తెలుగు</span>
-                                </span>
-                                @if(app()->getLocale() == 'te')
-                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                @endif
-                            </a>
-                            <a href="/lang/ta"
-                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
-                                <span class="flex items-center space-x-2">
-                                    <span>🐅</span>
-                                    <span>தமிழ்</span>
-                                </span>
-                                @if(app()->getLocale() == 'ta')
-                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                @endif
-                            </a>
-                        </div>
-                    </div>
+        {{-- Slides --}}
+        <template x-for="(slide, index) in slides" :key="index">
+            <div x-show="active === index" x-transition:enter="transition ease-out duration-1000"
+                x-transition:enter-start="opacity-0 scale-110" x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-1000" x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95" class="absolute inset-0 z-0">
+                <img :src="slide.image" :alt="slide.title" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/40 bg-gradient-to-b from-black/20 via-transparent to-black/60">
                 </div>
             </div>
-        </div>
-    </nav>
+        </template>
 
-    {{-- Hero Section --}}
-    <div class="relative h-[600px] flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <img src="{{ asset('images/hero.png') }}" alt="Dharamshala Hero" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        {{-- Content Overlay --}}
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+            <template x-for="(slide, index) in slides" :key="'content-' + index">
+                <div x-show="active === index" x-transition:enter="transition ease-out delay-500 duration-1000"
+                    x-transition:enter-start="opacity-0 translate-y-8"
+                    x-transition:enter-end="opacity-100 translate-y-0">
+                    <h1 class="text-5xl md:text-7xl font-black text-white mb-8 leading-tight tracking-tight"
+                        x-text="slide.title"></h1>
+                    <p class="text-xl md:text-2xl text-blue-50 mb-12 leading-relaxed opacity-90 max-w-3xl mx-auto font-light"
+                        x-text="slide.subtitle"></p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                        <a href="/book"
+                            class="px-10 py-5 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 transition shadow-2xl shadow-blue-500/20 transform hover:-translate-y-1 active:scale-95">
+                            {{ trans_db('book_now') }}
+                        </a>
+                        <a href="#rooms"
+                            class="px-10 py-5 bg-white/10 backdrop-blur-md text-white border border-white/30 font-bold rounded-2xl hover:bg-white/20 transition shadow-xl transform hover:-translate-y-1 active:scale-95">
+                            {{ trans_db('explore_rooms') }}
+                        </a>
+                    </div>
+                </div>
+            </template>
         </div>
 
-        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                {{ trans_db('welcome_title') }}
-            </h1>
-            <p class="text-lg md:text-xl text-blue-50 mb-10 leading-relaxed">
-                {{ trans_db('welcome_subtitle') }}
-            </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="/book"
-                    class="px-8 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                    {{ trans_db('book_now') }}
-                </a>
-                <a href="#rooms"
-                    class="px-8 py-4 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                    {{ trans_db('explore_rooms') }}
-                </a>
-            </div>
+        {{-- Slider Navigation --}}
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex space-x-3">
+            <template x-for="(slide, index) in slides" :key="'dot-' + index">
+                <button @click="active = index" class="w-3 h-3 rounded-full transition-all duration-500"
+                    :class="active === index ? 'bg-white w-8 shadow-lg' : 'bg-white/30 hover:bg-white/50'"></button>
+            </template>
         </div>
     </div>
 
@@ -179,8 +65,11 @@
                 <div class="w-20 h-1.5 bg-blue-600 mx-auto rounded-full"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" x-data="{ show: false }"
+                x-init="setTimeout(() => show = true, 300)">
+                <div x-show="show" x-transition:enter="transition ease-out duration-1000 delay-100"
+                    x-transition:enter-start="opacity-0 translate-y-8"
+                    x-transition:enter-end="opacity-100 translate-y-0"
                     class="p-8 bg-gray-50 rounded-2xl border border-gray-100 hover:border-blue-200 hover:shadow-xl transition group text-center">
                     <div
                         class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:bg-blue-600 group-hover:text-white transition">
@@ -195,7 +84,9 @@
                         for all our guests.</p>
                 </div>
 
-                <div
+                <div x-show="show" x-transition:enter="transition ease-out duration-1000 delay-300"
+                    x-transition:enter-start="opacity-0 translate-y-8"
+                    x-transition:enter-end="opacity-100 translate-y-0"
                     class="p-8 bg-gray-50 rounded-2xl border border-gray-100 hover:border-blue-200 hover:shadow-xl transition group text-center">
                     <div
                         class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:bg-blue-600 group-hover:text-white transition">
@@ -210,7 +101,9 @@
                         for everyone.</p>
                 </div>
 
-                <div
+                <div x-show="show" x-transition:enter="transition ease-out duration-1000 delay-500"
+                    x-transition:enter-start="opacity-0 translate-y-8"
+                    x-transition:enter-end="opacity-100 translate-y-0"
                     class="p-8 bg-gray-50 rounded-2xl border border-gray-100 hover:border-blue-200 hover:shadow-xl transition group text-center">
                     <div
                         class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:bg-blue-600 group-hover:text-white transition">

@@ -8,7 +8,7 @@
                     <p class="text-3xl font-bold text-gray-900 mt-2">{{ $building?->floors->sum(fn($f) => $f->rooms->count()) ?? 0 }}</p>
                 </div>
                 <div class="bg-blue-100 p-3 rounded-lg">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    <i data-lucide="building-2" class="w-6 h-6 text-blue-600"></i>
                 </div>
             </div>
         </div>
@@ -20,7 +20,7 @@
                     <p class="text-3xl font-bold text-green-600 mt-2">{{ $building?->floors->sum(fn($f) => $f->rooms->where('status', 'available')->count()) ?? 0 }}</p>
                 </div>
                 <div class="bg-green-100 p-3 rounded-lg">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
                     <p class="text-3xl font-bold text-red-600 mt-2">{{ $building?->floors->sum(fn($f) => $f->rooms->where('status', 'occupied')->count()) ?? 0 }}</p>
                 </div>
                 <div class="bg-red-100 p-3 rounded-lg">
-                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <i data-lucide="users" class="w-6 h-6 text-red-600"></i>
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
                     <p class="text-3xl font-bold text-amber-600 mt-2">{{ $building?->floors->sum(fn($f) => $f->rooms->where('status', 'maintenance')->count()) ?? 0 }}</p>
                 </div>
                 <div class="bg-amber-100 p-3 rounded-lg">
-                    <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <i data-lucide="wrench" class="w-6 h-6 text-amber-600"></i>
                 </div>
             </div>
         </div>
@@ -84,10 +84,10 @@
                                         'cleaning' => 'bg-blue-50 border-blue-300 hover:border-blue-500'
                                     ];
                                     $statusIcons = [
-                                        'available' => '✓',
-                                        'occupied' => '●',
-                                        'maintenance' => '⚙',
-                                        'cleaning' => '◐'
+                                        'available' => 'check',
+                                        'occupied' => 'user',
+                                        'maintenance' => 'wrench',
+                                        'cleaning' => 'refresh-cw'
                                     ];
                                     $statusTextColors = [
                                         'available' => 'text-green-700',
@@ -99,7 +99,9 @@
                                 
                                 <div class="relative group cursor-pointer {{ $statusColors[$room->status] }} border-2 rounded-lg p-4 transition-all duration-200 hover:shadow-md">
                                     <div class="flex flex-col items-center space-y-2">
-                                        <div class="text-2xl {{ $statusTextColors[$room->status] }}">{{ $statusIcons[$room->status] }}</div>
+                                        <div class="text-2xl {{ $statusTextColors[$room->status] }}">
+                                            <i data-lucide="{{ $statusIcons[$room->status] }}" class="w-8 h-8"></i>
+                                        </div>
                                         <div class="text-center">
                                             <p class="font-bold text-gray-900 text-lg">{{ $room->room_number }}</p>
                                             <p class="text-xs text-gray-600 mt-1">{{ $room->roomCategory->name }}</p>
@@ -125,9 +127,7 @@
         </div>
     @else
         <div class="bg-gray-50 rounded-lg p-12 text-center border border-gray-200">
-            <svg class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-            </svg>
+            <i data-lucide="building" class="mx-auto h-12 w-12 text-gray-400 mb-3"></i>
             <p class="text-gray-500 font-medium">{{ trans_db('no_building_selected') }}</p>
             <p class="text-gray-400 text-sm mt-1">{{ trans_db('select_building_hint') }}</p>
         </div>

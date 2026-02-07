@@ -30,37 +30,99 @@
     <meta property="twitter:image" content="{{ asset('images/og-image.jpg') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
         }
     </style>
 
-    {{-- Schema Markup (JSON-LD) --}}
-    <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "Hotel",
-      "name": "{{ $seo_site_name ?? 'Dharamshala Connect' }}",
-      "description": "{{ $seo_description ?? 'Affordable and comfortable stays for pilgrims and travelers.' }}",
-      "address": {
-        "@@type": "PostalAddress",
-        "streetAddress": "{{ \App\Models\Setting::get('contact_address', 'Main Road') }}",
-        "addressLocality": "Dharamshala",
-        "addressRegion": "HP",
-        "postalCode": "176215",
-        "addressCountry": "IN"
-      },
-      "telephone": "{{ \App\Models\Setting::get('contact_phone', '+91 0000000000') }}",
-      "priceRange": "₹500 - ₹2000",
-      "url": "{{ url('/') }}"
-    }
-    </script>
     @livewireStyles
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body class="bg-gray-50">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                {{-- Left: Logo + Branding --}}
+                <div class="flex items-center space-x-3">
+                    <a href="/" class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+                            <i data-lucide="home" class="w-7 h-7 text-white" style="width: 28px; height: 28px;"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900">Dharamshala Connect</h1>
+                            <p class="text-xs text-gray-600">Shree Ram Trust</p>
+                        </div>
+                    </a>
+                </div>
+
+                {{-- Right: Navigation + Language Switcher --}}
+                <div class="flex items-center space-x-6">
+                    <a href="/"
+                        class="text-sm font-semibold {{ request()->is('/') ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : 'text-gray-700 hover:text-blue-600 transition' }}">{{ trans_db('home') }}</a>
+                    <a href="/book"
+                        class="text-sm font-semibold {{ request()->is('book') ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : 'text-gray-700 hover:text-blue-600 transition' }}">{{ trans_db('book_now') }}</a>
+                    <div class="h-6 w-px bg-gray-300"></div>
+                    <a href="/login"
+                        class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">{{ trans_db('staff_login') }}</a>
+
+                    {{-- Language Switcher --}}
+                    <div class="relative" x-data="{ open: false }">
+                        <button x-on:click="open = !open"
+                            class="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition border border-gray-300 rounded-lg hover:border-blue-600">
+                            <i data-lucide="languages" class="w-4 h-4" style="width: 16px; height: 16px;"></i>
+                            <span>
+                                @if(app()->getLocale() == 'en') English
+                                @elseif(app()->getLocale() == 'hi') हिंदी
+                                @elseif(app()->getLocale() == 'gu') ગુજરાતી
+                                @elseif(app()->getLocale() == 'te') తెలుగు
+                                @elseif(app()->getLocale() == 'ta') தமிழ்
+                                @endif
+                            </span>
+                            <i data-lucide="chevron-down" class="w-4 h-4" style="width: 16px; height: 16px;"></i>
+                        </button>
+
+                        <div x-show="open" x-on:click.away="open = false" x-transition
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                            {{-- ... Language options ... --}}
+                            <a href="/lang/en"
+                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
+                                <span class="flex items-center space-x-2"><span>🇺🇸</span><span>English</span></span>
+                            </a>
+                            <a href="/lang/hi"
+                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
+                                <span class="flex items-center space-x-2"><span>🇮🇳</span><span>हिंदी</span></span>
+                            </a>
+                            <a href="/lang/gu"
+                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
+                                <span class="flex items-center space-x-2"><span>🦁</span><span>ગુજરાતી</span></span>
+                            </a>
+                            <a href="/lang/mr"
+                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
+                                <span class="flex items-center space-x-2"><span>🚩</span><span>मराठी</span></span>
+                            </a>
+                            <a href="/lang/te"
+                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
+                                <span class="flex items-center space-x-2"><span>🕉️</span><span>తెలుగు</span></span>
+                            </a>
+                            <a href="/lang/ta"
+                                class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition">
+                                <span class="flex items-center space-x-2"><span>🐅</span><span>தமிழ்</span></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
     <main>
         {{ $slot }}
@@ -127,7 +189,8 @@
                         <li><a href="/" class="text-gray-400 hover:text-white transition">{{ trans_db('home') }}</a>
                         </li>
                         <li><a href="/book"
-                                class="text-gray-400 hover:text-white transition">{{ trans_db('book_now') }}</a></li>
+                                class="text-gray-400 hover:text-white transition">{{ trans_db('book_now') }}</a>
+                        </li>
                         <li><a href="/festivals" class="text-gray-400 hover:text-white transition">Festivals</a></li>
                         <li><a href="/faq" class="text-gray-400 hover:text-white transition">FAQ</a></li>
                         <li><a href="/policies" class="text-gray-400 hover:text-white transition">Policies</a></li>
@@ -190,6 +253,19 @@
 
     @livewireScripts
     <script>
+        function initLucide() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', initLucide);
+        document.addEventListener('livewire:navigated', initLucide);
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.hook('morph.updated', (el, component) => {
+                initLucide();
+            });
+        });
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js');
