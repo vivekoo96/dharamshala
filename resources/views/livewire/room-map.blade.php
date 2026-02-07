@@ -1,49 +1,61 @@
 <div class="space-y-6">
     {{-- Header Stats --}}
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+    @php
+        $rooms = $building?->floors->flatMap->rooms ?? collect();
+        $total = $rooms->count();
+        $available = $rooms->filter(fn($r) => $r->remaining_beds > 0 && $r->status !== 'maintenance')->count();
+        $occupied = $rooms->filter(fn($r) => $r->remaining_beds <= 0 && $r->status !== 'maintenance')->count();
+        $maintenance = $rooms->where('status', 'maintenance')->count();
+    @endphp
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-600 font-medium">{{ trans_db('total_rooms') }}</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $building?->floors->sum(fn($f) => $f->rooms->count()) ?? 0 }}</p>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+                        {{ trans_db('total_rooms') }}</p>
+                    <p class="text-3xl font-black text-slate-900 mt-2">{{ $total }}</p>
                 </div>
-                <div class="bg-blue-100 p-3 rounded-lg">
+                <div class="bg-blue-50 p-3 rounded-xl">
                     <i data-lucide="building-2" class="w-6 h-6 text-blue-600"></i>
                 </div>
             </div>
         </div>
-        
-        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+
+        <div class="bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-600 font-medium">{{ trans_db('available') }}</p>
-                    <p class="text-3xl font-bold text-green-600 mt-2">{{ $building?->floors->sum(fn($f) => $f->rooms->where('status', 'available')->count()) ?? 0 }}</p>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+                        {{ trans_db('available') }}</p>
+                    <p class="text-3xl font-black text-emerald-600 mt-2">{{ $available }}</p>
                 </div>
-                <div class="bg-green-100 p-3 rounded-lg">
-                    <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                <div class="bg-emerald-50 p-3 rounded-xl">
+                    <i data-lucide="check-circle" class="w-6 h-6 text-emerald-600"></i>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-600 font-medium">{{ trans_db('occupied') }}</p>
-                    <p class="text-3xl font-bold text-red-600 mt-2">{{ $building?->floors->sum(fn($f) => $f->rooms->where('status', 'occupied')->count()) ?? 0 }}</p>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+                        {{ trans_db('occupied') }}</p>
+                    <p class="text-3xl font-black text-red-600 mt-2">{{ $occupied }}</p>
                 </div>
-                <div class="bg-red-100 p-3 rounded-lg">
+                <div class="bg-red-50 p-3 rounded-xl">
                     <i data-lucide="users" class="w-6 h-6 text-red-600"></i>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-600 font-medium">{{ trans_db('maintenance') }}</p>
-                    <p class="text-3xl font-bold text-amber-600 mt-2">{{ $building?->floors->sum(fn($f) => $f->rooms->where('status', 'maintenance')->count()) ?? 0 }}</p>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+                        {{ trans_db('maintenance') }}</p>
+                    <p class="text-3xl font-black text-amber-600 mt-2">{{ $maintenance }}</p>
                 </div>
-                <div class="bg-amber-100 p-3 rounded-lg">
+                <div class="bg-amber-50 p-3 rounded-xl">
                     <i data-lucide="wrench" class="w-6 h-6 text-amber-600"></i>
                 </div>
             </div>
@@ -51,14 +63,14 @@
     </div>
 
     {{-- Building Selector --}}
-    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+    <div class="bg-white rounded-2xl shadow-sm p-4 border border-slate-200">
         <div class="flex items-center space-x-3">
-            <span class="text-sm font-medium text-gray-700">{{ trans_db('select_building') }}:</span>
-            @foreach($buildings as $building)
-                <button 
-                    wire:click="selectBuilding({{ $building->id }})"
-                    class="px-4 py-2 rounded-lg text-sm font-medium transition {{ $selectedBuildingId == $building->id ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                    {{ $building->name }}
+            <span
+                class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{{ trans_db('select_building') }}:</span>
+            @foreach($buildings as $b)
+                <button wire:click="selectBuilding({{ $b->id }})"
+                    class="px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all {{ $selectedBuildingId == $b->id ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                    {{ $b->name }}
                 </button>
             @endforeach
         </div>
@@ -66,57 +78,93 @@
 
     {{-- Room Grid by Floor --}}
     @if($building)
-        <div class="space-y-6">
-            @foreach($building->floors as $floor)
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="bg-blue-600 px-6 py-4">
-                        <h3 class="text-lg font-semibold text-white">{{ $floor->floor_number }}</h3>
+        <div class="space-y-8">
+            @foreach($building->floors->sortByDesc('floor_number') as $floor)
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-blue-600 px-6 py-4 flex items-center justify-between">
+                        <h3 class="text-sm font-black text-white uppercase tracking-[0.3em]">
+                            @if($floor->floor_number == 0) THE GROUND FLOOR @else FLOOR {{ $floor->floor_number }} @endif
+                        </h3>
+                        <span class="text-[10px] font-bold text-blue-100 uppercase tracking-widest">{{ $floor->rooms->count() }}
+                            ROOMS</span>
                     </div>
-                    
-                    <div class="p-6">
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+
+                    <div class="p-8">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
                             @foreach($floor->rooms as $room)
                                 @php
-                                    $statusColors = [
-                                        'available' => 'bg-green-50 border-green-300 hover:border-green-500',
-                                        'occupied' => 'bg-red-50 border-red-300 hover:border-red-500',
-                                        'maintenance' => 'bg-amber-50 border-amber-300 hover:border-amber-500',
-                                        'cleaning' => 'bg-blue-50 border-blue-300 hover:border-blue-500'
-                                    ];
-                                    $statusIcons = [
-                                        'available' => 'check',
-                                        'occupied' => 'user',
-                                        'maintenance' => 'wrench',
-                                        'cleaning' => 'refresh-cw'
-                                    ];
-                                    $statusTextColors = [
-                                        'available' => 'text-green-700',
-                                        'occupied' => 'text-red-700',
-                                        'maintenance' => 'text-amber-700',
-                                        'cleaning' => 'text-blue-700'
-                                    ];
+                                    $isFull = $room->remaining_beds <= 0;
+                                    $isMaintenance = $room->status === 'maintenance';
+                                    $isCleaning = $room->status === 'cleaning';
+
+                                    $borderColor = 'border-emerald-500';
+                                    $bgColor = 'bg-white';
+                                    $statusLabel = 'AVAILABLE';
+                                    $statusColor = 'text-emerald-500';
+
+                                    if ($isMaintenance) {
+                                        $borderColor = 'border-slate-200';
+                                        $bgColor = 'bg-slate-50 opacity-60';
+                                        $statusLabel = 'MAINTENANCE';
+                                        $statusColor = 'text-amber-600';
+                                    } elseif ($isFull) {
+                                        $borderColor = 'border-red-100';
+                                        $bgColor = 'bg-red-50';
+                                        $statusLabel = 'ROOM FULL';
+                                        $statusColor = 'text-red-500';
+                                    } elseif ($room->occupied_beds_count > 0) {
+                                        $statusLabel = 'SHARING';
+                                        $statusColor = 'text-blue-500';
+                                        $borderColor = 'border-emerald-300';
+                                    }
+
+                                    if ($isCleaning) {
+                                        $statusLabel = 'CLEANING';
+                                        $statusColor = 'text-blue-600';
+                                        $borderColor = 'border-blue-200';
+                                    }
                                 @endphp
-                                
-                                <div class="relative group cursor-pointer {{ $statusColors[$room->status] }} border-2 rounded-lg p-4 transition-all duration-200 hover:shadow-md">
-                                    <div class="flex flex-col items-center space-y-2">
-                                        <div class="text-2xl {{ $statusTextColors[$room->status] }}">
-                                            <i data-lucide="{{ $statusIcons[$room->status] }}" class="w-8 h-8"></i>
+
+                                <div
+                                    class="relative group border-2 rounded-2xl p-5 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 {{ $borderColor }} {{ $bgColor }} flex flex-col items-center justify-between min-h-[160px]">
+                                    <div class="w-full text-center space-y-1 mb-4">
+                                        <p class="text-2xl font-black tracking-tighter leading-none text-slate-900">
+                                            {{ $room->room_number }}</p>
+                                        <p class="text-[8px] font-bold uppercase tracking-widest opacity-60 text-slate-500">
+                                            {{ $room->roomCategory->name }}</p>
+                                    </div>
+
+                                    <div class="w-full text-center space-y-4">
+                                        <div class="flex flex-col items-center">
+                                            <span
+                                                class="text-[9px] font-black uppercase tracking-[0.2em] {{ $statusColor }}">{{ $statusLabel }}</span>
+                                            <span
+                                                class="text-[10px] font-bold text-slate-400 tabular-nums">₹{{ number_format($room->roomCategory->base_tariff, 0) }}</span>
                                         </div>
-                                        <div class="text-center">
-                                            <p class="font-bold text-gray-900 text-lg">{{ $room->room_number }}</p>
-                                            <p class="text-xs text-gray-600 mt-1">{{ $room->roomCategory->name }}</p>
-                                            <p class="text-xs font-medium {{ $statusTextColors[$room->status] }} mt-1 uppercase">{{ $room->status }}</p>
+
+                                        {{-- Bed Occupancy Indicator --}}
+                                        <div class="w-full space-y-1.5 px-2">
+                                            <div class="flex justify-between items-center text-[8px] font-black text-slate-400">
+                                                <span>BEDS</span>
+                                                <span>{{ $room->occupied_beds_count }}/{{ $room->roomCategory->capacity }}</span>
+                                            </div>
+                                            <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-50">
+                                                <div class="h-full transition-all duration-500 {{ $isFull ? 'bg-red-500' : 'bg-emerald-500' }}"
+                                                    style="width:{{ ($room->occupied_beds_count / $room->roomCategory->capacity) * 100 }}%">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    
-                                    {{-- Hover Tooltip --}}
-                                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-10">
-                                        <div class="bg-gray-900 text-white text-xs rounded-lg py-2 px-3 shadow-xl whitespace-nowrap">
-                                            <p class="font-semibold">Room {{ $room->room_number }}</p>
-                                            <p class="text-gray-300">{{ $room->roomCategory->name }}</p>
-                                            <p class="text-gray-300">Capacity: {{ $room->roomCategory->capacity }}</p>
-                                            <p class="text-gray-300">₹{{ number_format($room->roomCategory->base_tariff, 0) }}/night</p>
-                                        </div>
+
+                                    {{-- Status Icon Overlay --}}
+                                    <div class="absolute top-3 right-3 opacity-20 group-hover:opacity-100 transition-all">
+                                        @if($statusLabel === 'AVAILABLE' || $statusLabel === 'SHARING')
+                                            <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>
+                                        @elseif($isMaintenance)
+                                            <i data-lucide="wrench" class="w-4 h-4 text-amber-500"></i>
+                                        @elseif($isFull)
+                                            <i data-lucide="users" class="w-4 h-4 text-red-500"></i>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
@@ -125,33 +173,30 @@
                 </div>
             @endforeach
         </div>
-    @else
-        <div class="bg-gray-50 rounded-lg p-12 text-center border border-gray-200">
-            <i data-lucide="building" class="mx-auto h-12 w-12 text-gray-400 mb-3"></i>
-            <p class="text-gray-500 font-medium">{{ trans_db('no_building_selected') }}</p>
-            <p class="text-gray-400 text-sm mt-1">{{ trans_db('select_building_hint') }}</p>
-        </div>
     @endif
 
     {{-- Legend --}}
-    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-        <h4 class="text-sm font-semibold text-gray-900 mb-3">{{ trans_db('status_legend') }}</h4>
-        <div class="flex flex-wrap gap-4">
-            <div class="flex items-center space-x-2">
-                <div class="w-4 h-4 bg-green-500 rounded"></div>
-                <span class="text-sm text-gray-600">Available</span>
+    <div class="bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
+        <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">{{ trans_db('status_legend') }}
+        </h4>
+        <div class="flex flex-wrap gap-8">
+            <div class="flex items-center space-x-3">
+                <div class="w-5 h-5 bg-white border-2 border-emerald-500 rounded-lg"></div>
+                <span class="text-xs font-bold text-slate-600">Available</span>
             </div>
-            <div class="flex items-center space-x-2">
-                <div class="w-4 h-4 bg-red-500 rounded"></div>
-                <span class="text-sm text-gray-600">Occupied</span>
+            <div class="flex items-center space-x-3">
+                <div class="w-5 h-5 bg-white border-2 border-emerald-300 rounded-lg flex items-center justify-center">
+                    <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                </div>
+                <span class="text-xs font-bold text-slate-600">Sharing / Partial</span>
             </div>
-            <div class="flex items-center space-x-2">
-                <div class="w-4 h-4 bg-amber-500 rounded"></div>
-                <span class="text-sm text-gray-600">Maintenance</span>
+            <div class="flex items-center space-x-3">
+                <div class="w-5 h-5 bg-red-50 border-2 border-red-100 rounded-lg"></div>
+                <span class="text-xs font-bold text-slate-600">Occupied (Full)</span>
             </div>
-            <div class="flex items-center space-x-2">
-                <div class="w-4 h-4 bg-blue-500 rounded"></div>
-                <span class="text-sm text-gray-600">Cleaning/Buffer</span>
+            <div class="flex items-center space-x-3">
+                <div class="w-5 h-5 bg-slate-50 border-2 border-slate-200 rounded-lg opacity-60"></div>
+                <span class="text-xs font-bold text-slate-600">Maintenance</span>
             </div>
         </div>
     </div>

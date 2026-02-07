@@ -40,6 +40,7 @@ class CounterBooking extends Component
     public $filter_category_id = null;
     public $discount = 0;
     public $discount_reason = '';
+    public $selectedBuildingId;
 
     // For View
     public $buildings = [];
@@ -51,6 +52,10 @@ class CounterBooking extends Component
         $this->check_out = now()->addDay()->format('Y-m-d\TH:i');
         $this->room_categories = RoomCategory::all();
         $this->loadRooms();
+
+        if ($this->buildings->count() > 0) {
+            $this->selectedBuildingId = $this->buildings->first()->id;
+        }
     }
 
     public function loadRooms()
@@ -72,6 +77,11 @@ class CounterBooking extends Component
     {
         $this->filter_category_id = $categoryId;
         $this->loadRooms();
+    }
+
+    public function selectBuilding($buildingId)
+    {
+        $this->selectedBuildingId = $buildingId;
     }
 
     public function toggleRoom($roomId)
@@ -145,6 +155,29 @@ class CounterBooking extends Component
     public function totalTariff()
     {
         return $this->selectedRoomsData()->sum(fn($room) => $room->roomCategory->base_tariff);
+    }
+
+    #[Computed]
+    public function currentBuilding()
+    {
+        return Building::with(['floors.rooms.roomCategory', 'floors.rooms.activeBookings'])->find($this->selectedBuildingId);
+    }
+
+    #[Computed]
+    public function buildingStats()
+    {
+        $building = $this->currentBuilding();
+        if (!$building)
+            return ['total' => 0, 'available' => 0, 'occupied' => 0, 'maintenance' => 0];
+
+        $rooms = $building->floors->flatMap->rooms;
+
+        return [
+            'total' => $rooms->count(),
+            'available' => $rooms->filter(fn($r) => $r->remaining_beds > 0 && $r->status !== 'maintenance')->count(),
+            'occupied' => $rooms->filter(fn($r) => $r->remaining_beds <= 0 && $r->status !== 'maintenance')->count(),
+            'maintenance' => $rooms->where('status', 'maintenance')->count(),
+        ];
     }
 
     #[Computed]
