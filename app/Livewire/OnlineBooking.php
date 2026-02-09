@@ -12,6 +12,8 @@ use App\Models\Building;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+use Livewire\Attributes\Computed;
+
 #[Layout('layouts.public')]
 class OnlineBooking extends Component
 {
@@ -23,10 +25,10 @@ class OnlineBooking extends Component
     public $children = 0;
 
     // Room Selection
-    public $available_categories = [];
+    // public $available_categories = []; // Removed unused
     public $selected_category_id;
     public $selected_rooms = []; // Array of room IDs
-    public $buildings = [];
+    // public $buildings = []; // Converted to Computed
     public $selectedBuildingId;
 
     // Guest Information
@@ -51,7 +53,9 @@ class OnlineBooking extends Component
     public function updatedCheckIn($value)
     {
         if ($value) {
-            $this->check_out = Carbon::parse($value)->addDay()->format('Y-m-d\TH:i');
+            // Ensure Check-out is updated to be after Check-in
+            $checkInDate = Carbon::parse($value);
+            $this->check_out = $checkInDate->addDay()->format('Y-m-d\TH:i');
             $this->calculateNights();
         }
     }
@@ -74,25 +78,33 @@ class OnlineBooking extends Component
         $this->check_in = now()->addDay()->setHour(12)->setMinute(0)->format('Y-m-d\TH:i');
         $this->check_out = Carbon::parse($this->check_in)->addDay()->format('Y-m-d\TH:i');
 
-        // Load all data immediately for single-page view
-        $this->loadRooms();
-    }
-
-    public function loadRooms()
-    {
-        // Load buildings for the Room Map view
-        $this->buildings = Building::with([
-            'floors' => function ($query) {
-                $query->orderBy('floor_number', 'desc');
-            },
-            'floors.rooms' => function ($query) {
-                $query->with('roomCategory');
-            }
-        ])->get();
-
+        // Initialize default building if needed
+        // Accessing $this->buildings triggers the computed property
         if (!$this->selectedBuildingId && $this->buildings->count() > 0) {
             $this->selectedBuildingId = $this->buildings->first()->id;
         }
+    }
+
+    #[Computed]
+    public function buildings()
+    {
+        // Only fetch building info needed for the selector, no relationships
+        return Building::select('id', 'name')->get();
+    }
+
+    #[Computed]
+    public function rooms()
+    {
+        if ($this->selectedBuildingId) {
+            // Efficiently fetch rooms only for the selected building
+            return Room::query()
+                ->whereHas('floor', function ($query) {
+                    $query->where('building_id', $this->selectedBuildingId);
+                })
+                ->with('roomCategory')
+                ->get();
+        }
+        return collect();
     }
 
     public function selectBuilding($buildingId)
@@ -231,7 +243,7 @@ class OnlineBooking extends Component
         $this->adults_male = 1;
         $this->adults_female = 0;
         $this->children = 0;
-        $this->loadRooms();
+        // $this->loadRooms(); // No longer needed
     }
 
     public function resetForm()
@@ -242,6 +254,9 @@ class OnlineBooking extends Component
 
     public function render()
     {
-        return view('livewire.online-booking');
+        return view('livewire.online-booking', [
+            'rooms' => $this->rooms,
+            'buildings' => $this->buildings
+        ]);
     }
 }
