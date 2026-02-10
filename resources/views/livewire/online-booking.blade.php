@@ -286,13 +286,13 @@
                 @endif
 
                 {{-- Room Cards --}}
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
                     @forelse($rooms as $room)
-                                    <div wire:click="toggleRoom({{ $room->id }})" class="relative cursor-pointer group transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl rounded-2xl border px-4 py-3 flex items-center justify-between overflow-hidden
-                                                                                                            {{ in_array($room->id, $selected_rooms)
+                                    <div wire:click="toggleRoom({{ $room->id }})" class="relative cursor-pointer group transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl rounded-2xl border px-3 py-2.5 sm:px-4 sm:py-3 flex items-center justify-between overflow-hidden
+                                                                                                                                            {{ in_array($room->id, $selected_rooms)
                         ? 'border-transparent text-white shadow-lg ring-2 ring-blue-200 scale-[1.02]'
                         : 'bg-white border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 hover:shadow-indigo-100 hover:shadow-lg hover:-translate-y-1'
-                                                            }}"
+                                                                                            }}"
                                         style="{{ in_array($room->id, $selected_rooms) ? 'background: linear-gradient(to right, #2563eb, #4f46e5);' : '' }}">
 
                                         {{-- Loading Spinner Overlay --}}
@@ -318,12 +318,12 @@
                                             <div>
                                                 <div class="flex items-center gap-2">
                                                     <span
-                                                        class="font-bold text-lg leading-none {{ in_array($room->id, $selected_rooms) ? 'text-white' : 'text-slate-800 group-hover:text-blue-600' }}">
+                                                        class="font-bold text-base sm:text-lg leading-none {{ in_array($room->id, $selected_rooms) ? 'text-white' : 'text-slate-800 group-hover:text-blue-600' }}">
                                                         {{ $room->room_number }}
                                                     </span>
                                                 </div>
                                                 <p
-                                                    class="text-[10px] uppercase font-bold tracking-wider mt-0.5 {{ in_array($room->id, $selected_rooms) ? 'text-blue-100' : 'text-slate-400' }}">
+                                                    class="text-[10px] uppercase font-bold tracking-wider mt-0.5 truncate max-w-[80px] sm:max-w-none {{ in_array($room->id, $selected_rooms) ? 'text-blue-100' : 'text-slate-400' }}">
                                                     {{ $room->roomCategory->name ?? 'Room' }}
                                                 </p>
                                             </div>
